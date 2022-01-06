@@ -1,4 +1,4 @@
-% Created 2022-01-03 Mon 15:32
+% Created 2022-01-06 Thu 21:01
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -33,7 +33,7 @@
 A list of important stuff in \textbf{PyTorch} that I do not want to keep using the official documentation for. I have made this using the book \emph{``Deep Learning with PyTorch''}.
 
 \section{Tensor Manipulation}
-\label{sec:orgb3c2440}
+\label{sec:org6c71416}
 Tensors are indexed similar to multidimensional arrays. A Python list can also be passed to the constructor to create a tensor.
 \begin{minted}[]{python}
 points = torch.tensor([4.0, 1.0, 5.0, 3.0, 2.0, 1.0])
@@ -51,7 +51,7 @@ points[None]    # add a dimension of size 1 (like unsqueeze)
 \end{minted}
 
 \subsection{Tensor dimensions}
-\label{sec:orga6a3f88}
+\label{sec:orgec79a45}
 3D tensors have shapes in the following order:
 \begin{minted}[]{python}
 img_t = torch.randn(3, 5, 5) # shape [channels, rows, columns]
@@ -63,7 +63,7 @@ batch_t = torch.randn(2, 3, 5, 5) # shape [batch, channels, rows, columns]
 RGB dimensions are always counted third from the end, \textbf{-3}.
 
 \subsection{In-place operations}
-\label{sec:org97dc598}
+\label{sec:orgb98b231}
 Methods which are specific to \texttt{Tensor} objects are followed by an \emph{underscore}. This is used to indicate that the method operates \emph{in place} by modifying the input instead of creating a new tensor.
 \begin{minted}[]{python}
 a = torch.ones(3,2)
@@ -72,7 +72,7 @@ a.zero_()
 This code block mutates \texttt{a} and returns a null tensor of shape \((3,2)\).
 
 \subsection{Move to GPUs}
-\label{sec:org5fae4ff}
+\label{sec:org2348278}
 A tensor can be created on the GPU by providing the following argument to the constructor:
 \begin{minted}[]{python}
 points_gpu = torch.tensor([[4.0, 1.0], [5.0, 3.0], [2.0, 1.0]], device='cuda')
@@ -87,7 +87,7 @@ points_gpu = 2 * points.to(device='cuda')
 \end{minted}
 
 \subsection{Serializing tensors}
-\label{sec:orgac39d48}
+\label{sec:orgc517d2a}
 To avoid retraining models from scratch, we can save weight tensors with the help of the \texttt{pickle} format. If we have an output file called \texttt{ourpoints.t}, then:
 \begin{minted}[]{python}
 torch.save(points, '../ourpoints.t')
@@ -96,4 +96,23 @@ To load the weights, we call the \texttt{load} method.
 \begin{minted}[]{python}
 points = torch.load('..ourpoints.t')
 \end{minted}
+
+\section{Images}
+\label{sec:orgdcd853e}
+\subsection{Loading images}
+\label{sec:org06e36e9}
+This can be done with the \texttt{imageio} library. Suppose that the path to the image file is \texttt{'../xyz.jpg'}:
+\begin{minted}[]{python}
+    import imageio
+    img_arr = imageio.imread('../xyz.jpg')
+\end{minted}
+The image is loaded as a \texttt{NumPy} object. The layout of the dimensions is \(H\times W\times C\) corresponding to \textbf{height}, \textbf{width} and \textbf{channel} respectively.
+\subsection{Changing layout}
+\label{sec:orgd635603}
+The layout of the image tensor can be altered using the \texttt{permute} method (as expected by \texttt{Pytorch}).
+\begin{minted}[]{python}
+ torch_img = torch.from_numpy(img_arr) # convert to torch tensor
+ out = torch_img.permute(2, 0, 1) # (C X H X W)
+\end{minted}
+An extra dimension can be added for processing batches of images by specifying the dimensions of the tensor as \(N\times C\times H\times W\) where \(N\) is the batch size of the images.
 \end{document}

@@ -63,3 +63,19 @@ To load the weights, we call the =load= method.
 #+begin_src python
 points = torch.load('..ourpoints.t')
 #+end_src
+
+* Images
+** Loading images
+This can be done with the =imageio= library. Suppose that the path to the image file is ='../xyz.jpg'=:
+#+begin_src python
+    import imageio
+    img_arr = imageio.imread('../xyz.jpg')
+#+end_src
+The image is loaded as a =NumPy= object. The layout of the dimensions is $H\times W\times C$ corresponding to *height*, *width* and *channel* respectively.
+** Changing layout
+The layout of the image tensor can be altered using the =permute= method (as expected by =Pytorch=).
+#+begin_src python
+ torch_img = torch.from_numpy(img_arr) # convert to torch tensor
+ out = torch_img.permute(2, 0, 1) # (C X H X W)
+#+end_src
+An extra dimension can be added for processing batches of images by specifying the dimensions of the tensor as $N\times C\times H\times W$ where $N$ is the batch size of the images.
