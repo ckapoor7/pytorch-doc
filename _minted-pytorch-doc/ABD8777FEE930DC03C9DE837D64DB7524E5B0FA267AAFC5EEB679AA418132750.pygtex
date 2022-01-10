@@ -1,3 +1,0 @@
-\begin{Verbatim}[commandchars=\\\{\}]
-\PYG{n}{points} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{load}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}..ourpoints.t\PYGZsq{}}\PYG{p}{)}
-\end{Verbatim}
