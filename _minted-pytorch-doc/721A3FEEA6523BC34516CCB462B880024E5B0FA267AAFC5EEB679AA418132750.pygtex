@@ -1,0 +1,11 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+    \PYG{o}{\PYGZpc{}}\PYG{n}{matplotlib} \PYG{n}{inline}
+    \PYG{k+kn}{from} \PYG{n+nn}{matplotlib} \PYG{k+kn}{import} \PYG{n}{pyplot} \PYG{k}{as} \PYG{n}{plt}
+
+    \PYG{n}{t\PYGZus{}p} \PYG{o}{=} \PYG{n}{model}\PYG{p}{(}\PYG{n}{t\PYGZus{}un}\PYG{p}{,} \PYG{o}{*}\PYG{n}{params}\PYG{p}{)} \PYG{c+c1}{\PYGZsh{} argument unpacking}
+    \PYG{n}{fig} \PYG{o}{=} \PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{(}\PYG{n}{dpi}\PYG{o}{=}\PYG{l+m+mi}{600}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlabel}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Temperature (°Fahrenheit)\PYGZdq{}}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{ylabel}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Temperature (°Celsius)\PYGZdq{}}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{t\PYGZus{}u}\PYG{o}{.}\PYG{n}{numpy}\PYG{p}{(),} \PYG{n}{t\PYGZus{}p}\PYG{o}{.}\PYG{n}{detach}\PYG{p}{()}\PYG{o}{.}\PYG{n}{numpy}\PYG{p}{())}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{t\PYGZus{}u}\PYG{o}{.}\PYG{n}{numpy}\PYG{p}{(),} \PYG{n}{t\PYGZus{}c}\PYG{o}{.}\PYG{n}{numpy}\PYG{p}{(),} \PYG{l+s+s1}{\PYGZsq{}o\PYGZsq{}}\PYG{p}{)}
+\end{Verbatim}

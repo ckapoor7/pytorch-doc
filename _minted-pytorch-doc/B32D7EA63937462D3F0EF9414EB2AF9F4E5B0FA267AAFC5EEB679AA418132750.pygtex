@@ -1,0 +1,6 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n}{points}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{:]}      \PYG{c+c1}{\PYGZsh{} all rows after the first (implicitly all columns)}
+\PYG{n}{points}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{:,} \PYG{p}{:]}   \PYG{c+c1}{\PYGZsh{} all columns}
+\PYG{n}{points}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{:,} \PYG{l+m+mi}{0}\PYG{p}{]}   \PYG{c+c1}{\PYGZsh{} first column}
+\PYG{n}{points}\PYG{p}{[}\PYG{k+kc}{None}\PYG{p}{]}    \PYG{c+c1}{\PYGZsh{} add a dimension of size 1 (like unsqueeze)}
+\end{Verbatim}

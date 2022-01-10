@@ -1,0 +1,7 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+    \PYG{n}{n\PYGZus{}samples} \PYG{o}{=} \PYG{n}{t\PYGZus{}u}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}
+    \PYG{n}{n\PYGZus{}val} \PYG{o}{=} \PYG{n+nb}{int}\PYG{p}{(}\PYG{l+m+mf}{0.2} \PYG{o}{*} \PYG{n}{n\PYGZus{}samples}\PYG{p}{)}   \PYG{c+c1}{\PYGZsh{} perform an 80:20 split}
+    \PYG{n}{shuffled\PYGZus{}indices} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{randperm}\PYG{p}{(}\PYG{n}{n\PYGZus{}samples}\PYG{p}{)}
+    \PYG{n}{train\PYGZus{}indices} \PYG{o}{=} \PYG{n}{shuffled\PYGZus{}indices}\PYG{p}{[:}\PYG{o}{\PYGZhy{}}\PYG{n}{n\PYGZus{}val}\PYG{p}{]}
+    \PYG{n}{val\PYGZus{}indices} \PYG{o}{=} \PYG{n}{shuffled\PYGZus{}indices}\PYG{p}{[}\PYG{o}{\PYGZhy{}}\PYG{n}{n\PYGZus{}val}\PYG{p}{:]}
+\end{Verbatim}

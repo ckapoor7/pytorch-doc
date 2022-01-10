@@ -79,3 +79,56 @@ The layout of the image tensor can be altered using the =permute= method (as exp
  out = torch_img.permute(2, 0, 1) # (C X H X W)
 #+end_src
 An extra dimension can be added for processing batches of images by specifying the dimensions of the tensor as $N\times C\times H\times W$ where $N$ is the batch size of the images.
+
+* Learning process
+** Visualizing
+The most foolproof method to debug code is to begin by plotting it out. In the following code snippet, we plot /raw unknown values/.
+#+begin_src python
+    %matplotlib inline
+    from matplotlib import pyplot as plt
+
+    t_p = model(t_un, *params) # argument unpacking
+    fig = plt.figure(dpi=600)
+    plt.xlabel("Temperature (°Fahrenheit)")
+    plt.ylabel("Temperature (°Celsius)")
+    plt.plot(t_u.numpy(), t_p.detach().numpy())
+    plt.plot(t_u.numpy(), t_c.numpy(), 'o')
+#+end_src
+The argument =*params= is equivalent to passing the elements of =params= as individual arguemnts to our training model.
+
+** Backpropagation
+A training loop can be written with the help of gradient descent optimizers and standard loss functions that are shipped along with the =PyTorch= packages. The following code block illustrates a training loop function:
+#+begin_src python
+    def training_loop(n_epochs, optimizer, params, t_u, t_c):
+        for epoch in range(1, n_epochs + 1):
+            t_p = model(t_u, *params)
+            loss = loss_fn(t_p, t_c) # custom loss function
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step() # update parameters
+            if epoch % 500 == 0:
+                print('Epoch %d, Loss %f' % (epoch, float(loss)))
+        return params
+#+end_src
+Note that the gradients are /zeroed out/ after each loss update to ensure that the gradients are not accumulated in the leaf nodes of the computation graph that is constructed. An example of invoking the above training method using the =SGD= optimizer is shown below.
+#+begin_src python
+    params = torch.tensor([1.0, 0.0], requires_grad=True)
+    learning_rate = 1e-2
+    optimizer = optim.SGD([params], lr=learning_rate)
+    training_loop(
+        n_epochs = 5000,
+        optimizer = optimizer,
+        params = params,
+        t_u = t_un,
+        t_c = t_c)
+#+end_src
+
+** Splitting datasets
+Shuffling a dataset requires us to use a random permutation of tensor indices. This is done with the help of the =randperm= function.
+#+begin_src python
+    n_samples = t_u.shape[0]
+    n_val = int(0.2 * n_samples)   # perform an 80:20 split
+    shuffled_indices = torch.randperm(n_samples)
+    train_indices = shuffled_indices[:-n_val]
+    val_indices = shuffled_indices[-n_val:]
+#+end_src
