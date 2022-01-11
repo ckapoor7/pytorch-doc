@@ -1,4 +1,4 @@
-% Created 2022-01-11 Tue 21:38
+% Created 2022-01-11 Tue 21:53
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -33,74 +33,74 @@
 A list of important stuff in \textbf{PyTorch} that I do not want to keep using the official documentation for. I have made this using the book \emph{``Deep Learning with PyTorch''}.
 
 \section{Tensor Manipulation}
-\label{sec:orga93d8cf}
+\label{sec:org0eba5fd}
 Tensors are indexed similar to multidimensional arrays. A Python list can also be passed to the constructor to create a tensor.
 \begin{minted}[]{python}
-points = torch.tensor([4.0, 1.0, 5.0, 3.0, 2.0, 1.0])
+    points = torch.tensor([4.0, 1.0, 5.0, 3.0, 2.0, 1.0])
 \end{minted}
 The shape of the created tensor can also be accessed. Note that \texttt{shape} is \textbf{not} a callable function.
 \begin{minted}[]{python}
-points.shape
+    points.shape
 \end{minted}
 Some common ways to index a tensor (analogous to lists):
 \begin{minted}[]{python}
-points[1:]      # all rows after the first (implicitly all columns)
-points[1:, :]   # all columns
-points[1:, 0]   # first column
-points[None]    # add a dimension of size 1 (like unsqueeze)
+    points[1:]      # all rows after the first (implicitly all columns)
+    points[1:, :]   # all columns
+    points[1:, 0]   # first column
+    points[None]    # add a dimension of size 1 (like unsqueeze)
 \end{minted}
 
 \subsection{Tensor dimensions}
-\label{sec:org6e4d5b0}
+\label{sec:org6596c7a}
 3D tensors have shapes in the following order:
 \begin{minted}[]{python}
-img_t = torch.randn(3, 5, 5) # shape [channels, rows, columns]
+    img_t = torch.randn(3, 5, 5) # shape [channels, rows, columns]
 \end{minted}
 A 4D image tensor has the following shape:
 \begin{minted}[]{python}
-batch_t = torch.randn(2, 3, 5, 5) # shape [batch, channels, rows, columns]
+    batch_t = torch.randn(2, 3, 5, 5) # shape [batch, channels, rows, columns]
 \end{minted}
 RGB dimensions are always counted third from the end, \textbf{-3}.
 
 \subsection{In-place operations}
-\label{sec:orgccdc2e2}
+\label{sec:org4df0821}
 Methods which are specific to \texttt{Tensor} objects are followed by an \emph{underscore}. This is used to indicate that the method operates \emph{in place} by modifying the input instead of creating a new tensor.
 \begin{minted}[]{python}
-a = torch.ones(3,2)
-a.zero_()
+    a = torch.ones(3,2)
+    a.zero_()
 \end{minted}
 This code block mutates \texttt{a} and returns a null tensor of shape \((3,2)\).
 
 \subsection{Move to GPUs}
-\label{sec:org4b63581}
+\label{sec:org58aeed2}
 A tensor can be created on the GPU by providing the following argument to the constructor:
 \begin{minted}[]{python}
-points_gpu = torch.tensor([[4.0, 1.0], [5.0, 3.0], [2.0, 1.0]], device='cuda')
+    points_gpu = torch.tensor([[4.0, 1.0], [5.0, 3.0], [2.0, 1.0]], device='cuda')
 \end{minted}
 We can also copy a tensor created on the CPU to the GPU with the help of the \texttt{to} method.
 \begin{minted}[]{python}
-points_gpu = points.to(device='cuda')
+    points_gpu = points.to(device='cuda')
 \end{minted}
 Basic tensor operations can also be transferred to the GPU rather than performing them on the CPU.
 \begin{minted}[]{python}
-points_gpu = 2 * points.to(device='cuda')
+    points_gpu = 2 * points.to(device='cuda')
 \end{minted}
 
 \subsection{Serializing tensors}
-\label{sec:org2c0004b}
+\label{sec:orgf0ac630}
 To avoid retraining models from scratch, we can save weight tensors with the help of the \texttt{pickle} format. If we have an output file called \texttt{ourpoints.t}, then:
 \begin{minted}[]{python}
-torch.save(points, '../ourpoints.t')
+    torch.save(points, '../ourpoints.t')
 \end{minted}
 To load the weights, we call the \texttt{load} method.
 \begin{minted}[]{python}
-points = torch.load('..ourpoints.t')
+    points = torch.load('..ourpoints.t')
 \end{minted}
 
 \section{Images}
-\label{sec:orgeabe9b9}
+\label{sec:orgfab338a}
 \subsection{Loading images}
-\label{sec:org4612643}
+\label{sec:org970b447}
 This can be done with the \texttt{imageio} library. Suppose that the path to the image file is \texttt{'../xyz.jpg'}:
 \begin{minted}[]{python}
     import imageio
@@ -108,18 +108,18 @@ This can be done with the \texttt{imageio} library. Suppose that the path to the
 \end{minted}
 The image is loaded as a \texttt{NumPy} object. The layout of the dimensions is \(H\times W\times C\) corresponding to \textbf{height}, \textbf{width} and \textbf{channel} respectively.
 \subsection{Changing layout}
-\label{sec:org036d78a}
+\label{sec:orgfdcde73}
 The layout of the image tensor can be altered using the \texttt{permute} method (as expected by \texttt{Pytorch}).
 \begin{minted}[]{python}
- torch_img = torch.from_numpy(img_arr) # convert to torch tensor
- out = torch_img.permute(2, 0, 1) # (C X H X W)
+    torch_img = torch.from_numpy(img_arr) # convert to torch tensor
+    out = torch_img.permute(2, 0, 1) # (C X H X W)
 \end{minted}
 An extra dimension can be added for processing batches of images by specifying the dimensions of the tensor as \(N\times C\times H\times W\) where \(N\) is the batch size of the images.
 
 \section{Learning process}
-\label{sec:orgc8d1684}
+\label{sec:orgadbd9ff}
 \subsection{Visualizing}
-\label{sec:orgdc8553c}
+\label{sec:orgc3ee3c9}
 The most foolproof method to debug code is to begin by plotting it out. In the following code snippet, we plot \emph{raw unknown values}.
 \begin{minted}[]{python}
     %matplotlib inline
@@ -135,7 +135,7 @@ The most foolproof method to debug code is to begin by plotting it out. In the f
 The argument \texttt{*params} is equivalent to passing the elements of \texttt{params} as individual arguemnts to our training model.
 
 \subsection{Backpropagation}
-\label{sec:org244c356}
+\label{sec:org8fa8bf0}
 A training loop can be written with the help of gradient descent optimizers and standard loss functions that are shipped along with the \texttt{PyTorch} packages. The following code block illustrates a training loop function:
 \begin{minted}[]{python}
     def training_loop(n_epochs, optimizer, params, t_u, t_c):
@@ -163,7 +163,7 @@ Note that the gradients are \emph{zeroed out} after each loss update to ensure t
 \end{minted}
 
 \subsection{Splitting datasets}
-\label{sec:org7836771}
+\label{sec:orga6f0d54}
 Shuffling a dataset requires us to use a random permutation of tensor indices. This is done with the help of the \texttt{randperm} function.
 \begin{minted}[]{python}
     n_samples = t_u.shape[0]
@@ -174,9 +174,9 @@ Shuffling a dataset requires us to use a random permutation of tensor indices. T
 \end{minted}
 
 \section{Neural networks}
-\label{sec:org8d5246b}
+\label{sec:org27f66c6}
 \subsection{Linear models}
-\label{sec:orgc7bf91b}
+\label{sec:org78da1fd}
 The \texttt{nn.Linear} constructor takes in \textbf{three} arguments:
 \begin{enumerate}
 \item Number of input features
@@ -195,7 +195,7 @@ The linear module so constructed can now be called like a regular function, by p
 \end{minted}
 
 \subsection{Sequential models}
-\label{sec:org0753f74}
+\label{sec:org8b7e703}
 Multiple \texttt{nn} modules can be concatenated with the help of the \texttt{nn.Sequential} container. If suppose we were to construct a simple neural network containg 2 \emph{hidden} layers with a \texttt{Tanh} activation, the following code snippet would construct the required model:
 \begin{minted}[]{python}
     seq_model = nn.Sequential(
