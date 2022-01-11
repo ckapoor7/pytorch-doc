@@ -1,4 +1,4 @@
-% Created 2022-01-10 Mon 10:48
+% Created 2022-01-11 Tue 21:38
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -33,7 +33,7 @@
 A list of important stuff in \textbf{PyTorch} that I do not want to keep using the official documentation for. I have made this using the book \emph{``Deep Learning with PyTorch''}.
 
 \section{Tensor Manipulation}
-\label{sec:orgd4c8752}
+\label{sec:orga93d8cf}
 Tensors are indexed similar to multidimensional arrays. A Python list can also be passed to the constructor to create a tensor.
 \begin{minted}[]{python}
 points = torch.tensor([4.0, 1.0, 5.0, 3.0, 2.0, 1.0])
@@ -51,7 +51,7 @@ points[None]    # add a dimension of size 1 (like unsqueeze)
 \end{minted}
 
 \subsection{Tensor dimensions}
-\label{sec:org5ce533d}
+\label{sec:org6e4d5b0}
 3D tensors have shapes in the following order:
 \begin{minted}[]{python}
 img_t = torch.randn(3, 5, 5) # shape [channels, rows, columns]
@@ -63,7 +63,7 @@ batch_t = torch.randn(2, 3, 5, 5) # shape [batch, channels, rows, columns]
 RGB dimensions are always counted third from the end, \textbf{-3}.
 
 \subsection{In-place operations}
-\label{sec:orgb1d14dd}
+\label{sec:orgccdc2e2}
 Methods which are specific to \texttt{Tensor} objects are followed by an \emph{underscore}. This is used to indicate that the method operates \emph{in place} by modifying the input instead of creating a new tensor.
 \begin{minted}[]{python}
 a = torch.ones(3,2)
@@ -72,7 +72,7 @@ a.zero_()
 This code block mutates \texttt{a} and returns a null tensor of shape \((3,2)\).
 
 \subsection{Move to GPUs}
-\label{sec:org5c4e6dc}
+\label{sec:org4b63581}
 A tensor can be created on the GPU by providing the following argument to the constructor:
 \begin{minted}[]{python}
 points_gpu = torch.tensor([[4.0, 1.0], [5.0, 3.0], [2.0, 1.0]], device='cuda')
@@ -87,7 +87,7 @@ points_gpu = 2 * points.to(device='cuda')
 \end{minted}
 
 \subsection{Serializing tensors}
-\label{sec:org5c0bed5}
+\label{sec:org2c0004b}
 To avoid retraining models from scratch, we can save weight tensors with the help of the \texttt{pickle} format. If we have an output file called \texttt{ourpoints.t}, then:
 \begin{minted}[]{python}
 torch.save(points, '../ourpoints.t')
@@ -98,9 +98,9 @@ points = torch.load('..ourpoints.t')
 \end{minted}
 
 \section{Images}
-\label{sec:org590b744}
+\label{sec:orgeabe9b9}
 \subsection{Loading images}
-\label{sec:org49567b5}
+\label{sec:org4612643}
 This can be done with the \texttt{imageio} library. Suppose that the path to the image file is \texttt{'../xyz.jpg'}:
 \begin{minted}[]{python}
     import imageio
@@ -108,7 +108,7 @@ This can be done with the \texttt{imageio} library. Suppose that the path to the
 \end{minted}
 The image is loaded as a \texttt{NumPy} object. The layout of the dimensions is \(H\times W\times C\) corresponding to \textbf{height}, \textbf{width} and \textbf{channel} respectively.
 \subsection{Changing layout}
-\label{sec:org77304ca}
+\label{sec:org036d78a}
 The layout of the image tensor can be altered using the \texttt{permute} method (as expected by \texttt{Pytorch}).
 \begin{minted}[]{python}
  torch_img = torch.from_numpy(img_arr) # convert to torch tensor
@@ -117,9 +117,9 @@ The layout of the image tensor can be altered using the \texttt{permute} method 
 An extra dimension can be added for processing batches of images by specifying the dimensions of the tensor as \(N\times C\times H\times W\) where \(N\) is the batch size of the images.
 
 \section{Learning process}
-\label{sec:orgee53299}
+\label{sec:orgc8d1684}
 \subsection{Visualizing}
-\label{sec:org615514f}
+\label{sec:orgdc8553c}
 The most foolproof method to debug code is to begin by plotting it out. In the following code snippet, we plot \emph{raw unknown values}.
 \begin{minted}[]{python}
     %matplotlib inline
@@ -135,7 +135,7 @@ The most foolproof method to debug code is to begin by plotting it out. In the f
 The argument \texttt{*params} is equivalent to passing the elements of \texttt{params} as individual arguemnts to our training model.
 
 \subsection{Backpropagation}
-\label{sec:org4b78d48}
+\label{sec:org244c356}
 A training loop can be written with the help of gradient descent optimizers and standard loss functions that are shipped along with the \texttt{PyTorch} packages. The following code block illustrates a training loop function:
 \begin{minted}[]{python}
     def training_loop(n_epochs, optimizer, params, t_u, t_c):
@@ -163,7 +163,7 @@ Note that the gradients are \emph{zeroed out} after each loss update to ensure t
 \end{minted}
 
 \subsection{Splitting datasets}
-\label{sec:org6e5a991}
+\label{sec:org7836771}
 Shuffling a dataset requires us to use a random permutation of tensor indices. This is done with the help of the \texttt{randperm} function.
 \begin{minted}[]{python}
     n_samples = t_u.shape[0]
@@ -172,4 +172,36 @@ Shuffling a dataset requires us to use a random permutation of tensor indices. T
     train_indices = shuffled_indices[:-n_val]
     val_indices = shuffled_indices[-n_val:]
 \end{minted}
+
+\section{Neural networks}
+\label{sec:org8d5246b}
+\subsection{Linear models}
+\label{sec:orgc7bf91b}
+The \texttt{nn.Linear} constructor takes in \textbf{three} arguments:
+\begin{enumerate}
+\item Number of input features
+\item Number of output features
+\item Bias (True or False)
+\end{enumerate}
+\begin{minted}[]{python}
+    import torch.nn as nn
+
+    linear_model = nn.Linear(1, 1) # bias is 'True' by default
+    linear_model(t_un_val)
+\end{minted}
+The linear module so constructed can now be called like a regular function, by passing in the input matrix as an argument. To determine the parameters of the linear model, we can call the \texttt{parameters} function on \texttt{nn.Module} to return a list of parameters. For instance, in the above linear model, the following can be done to obtain the parameters:
+\begin{minted}[]{python}
+    list(linear_model.parameters())
+\end{minted}
+
+\subsection{Sequential models}
+\label{sec:org0753f74}
+Multiple \texttt{nn} modules can be concatenated with the help of the \texttt{nn.Sequential} container. If suppose we were to construct a simple neural network containg 2 \emph{hidden} layers with a \texttt{Tanh} activation, the following code snippet would construct the required model:
+\begin{minted}[]{python}
+    seq_model = nn.Sequential(
+                nn.Linear(1, 13),
+                nn.Tanh(),
+                nn.Linear(13, 1))
+\end{minted}
+In essence, the model constructed above has 1 input feature which fans out to 13 hidden features which is then passed through a \texttt{Tanh} activation. This combines linearly to give a single output feature.
 \end{document}

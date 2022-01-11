@@ -132,3 +132,30 @@ Shuffling a dataset requires us to use a random permutation of tensor indices. T
     train_indices = shuffled_indices[:-n_val]
     val_indices = shuffled_indices[-n_val:]
 #+end_src
+
+* Neural networks
+** Linear models
+The =nn.Linear= constructor takes in *three* arguments:
+1. Number of input features
+2. Number of output features
+3. Bias (True or False)
+#+begin_src python
+    import torch.nn as nn
+
+    linear_model = nn.Linear(1, 1) # bias is 'True' by default
+    linear_model(t_un_val)
+#+end_src
+The linear module so constructed can now be called like a regular function, by passing in the input matrix as an argument. To determine the parameters of the linear model, we can call the =parameters= function on =nn.Module= to return a list of parameters. For instance, in the above linear model, the following can be done to obtain the parameters:
+#+begin_src python
+    list(linear_model.parameters())
+#+end_src
+
+** Sequential models
+Multiple =nn= modules can be concatenated with the help of the =nn.Sequential= container. If suppose we were to construct a simple neural network containg 2 /hidden/ layers with a =Tanh= activation, the following code snippet would construct the required model:
+#+begin_src python
+    seq_model = nn.Sequential(
+                nn.Linear(1, 13),
+                nn.Tanh(),
+                nn.Linear(13, 1))
+#+end_src
+In essence, the model constructed above has 1 input feature which fans out to 13 hidden features which is then passed through a =Tanh= activation. This combines linearly to give a single output feature.
