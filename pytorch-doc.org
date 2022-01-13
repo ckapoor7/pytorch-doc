@@ -213,17 +213,22 @@ The =DataLoader= class helps in shuffling the data and organizing it in minibatc
 #+begin_src python
     import torch
     import torch.nn as nn
+
     train_loader = torch.utils.data.DataLoader(cifar2, batch_size=64,
                                             shuffle=True)
+
     model = nn.Sequential(
                 nn.Linear(3072, 512),
                 nn.Tanh(),
                 nn.Linear(512, 2),
                 nn.LogSoftmax(dim=1))
+
     learning_rate = 1e-2
+
     optimizer = optim.SGD(model.parameters(), lr=learning_rate)
     loss_fn = nn.NLLLoss()
     n_epochs = 100
+
     for epoch in range(n_epochs):
         for imgs, labels in train_loader:
             batch_size = imgs.shape[0]

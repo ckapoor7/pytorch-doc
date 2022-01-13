@@ -1,4 +1,4 @@
-% Created 2022-01-13 Thu 22:10
+% Created 2022-01-13 Thu 22:12
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -33,7 +33,7 @@
 A list of important stuff in \textbf{PyTorch} that I do not want to keep using the official documentation for. I have made this using the book \emph{``Deep Learning with PyTorch''}.
 
 \section{Tensor Manipulation}
-\label{sec:orgd74ae9c}
+\label{sec:org168aa47}
 Tensors are indexed similar to multidimensional arrays. A Python list can also be passed to the constructor to create a tensor.
 \begin{minted}[]{python}
     points = torch.tensor([4.0, 1.0, 5.0, 3.0, 2.0, 1.0])
@@ -51,7 +51,7 @@ Some common ways to index a tensor (analogous to lists):
 \end{minted}
 
 \subsection{Tensor dimensions}
-\label{sec:org47ab5c7}
+\label{sec:orgbddd27f}
 3D tensors have shapes in the following order:
 \begin{minted}[]{python}
     img_t = torch.randn(3, 5, 5) # shape [channels, rows, columns]
@@ -63,7 +63,7 @@ A 4D image tensor has the following shape:
 RGB dimensions are always counted third from the end, \textbf{-3}.
 
 \subsection{In-place operations}
-\label{sec:org60665c6}
+\label{sec:org4201e3d}
 Methods which are specific to \texttt{Tensor} objects are followed by an \emph{underscore}. This is used to indicate that the method operates \emph{in place} by modifying the input instead of creating a new tensor.
 \begin{minted}[]{python}
     a = torch.ones(3,2)
@@ -72,7 +72,7 @@ Methods which are specific to \texttt{Tensor} objects are followed by an \emph{u
 This code block mutates \texttt{a} and returns a null tensor of shape \((3,2)\).
 
 \subsection{Move to GPUs}
-\label{sec:org569d6f5}
+\label{sec:org3c99ceb}
 A tensor can be created on the GPU by providing the following argument to the constructor:
 \begin{minted}[]{python}
     points_gpu = torch.tensor([[4.0, 1.0], [5.0, 3.0], [2.0, 1.0]], device='cuda')
@@ -87,7 +87,7 @@ Basic tensor operations can also be transferred to the GPU rather than performin
 \end{minted}
 
 \subsection{Serializing tensors}
-\label{sec:orge520306}
+\label{sec:orgb4eb220}
 To avoid retraining models from scratch, we can save weight tensors with the help of the \texttt{pickle} format. If we have an output file called \texttt{ourpoints.t}, then:
 \begin{minted}[]{python}
     torch.save(points, '../ourpoints.t')
@@ -98,9 +98,9 @@ To load the weights, we call the \texttt{load} method.
 \end{minted}
 
 \section{Images}
-\label{sec:org4edba1f}
+\label{sec:orgc3daad2}
 \subsection{Loading images}
-\label{sec:org03bd370}
+\label{sec:orgd341c7b}
 This can be done with the \texttt{imageio} library. Suppose that the path to the image file is \texttt{'../xyz.jpg'}:
 \begin{minted}[]{python}
     import imageio
@@ -108,7 +108,7 @@ This can be done with the \texttt{imageio} library. Suppose that the path to the
 \end{minted}
 The image is loaded as a \texttt{NumPy} object. The layout of the dimensions is \(H\times W\times C\) corresponding to \textbf{height}, \textbf{width} and \textbf{channel} respectively.
 \subsection{Changing layout}
-\label{sec:org203c9df}
+\label{sec:org2849981}
 The layout of the image tensor can be altered using the \texttt{permute} method (as expected by \texttt{Pytorch}).
 \begin{minted}[]{python}
     torch_img = torch.from_numpy(img_arr) # convert to torch tensor
@@ -117,9 +117,9 @@ The layout of the image tensor can be altered using the \texttt{permute} method 
 An extra dimension can be added for processing batches of images by specifying the dimensions of the tensor as \(N\times C\times H\times W\) where \(N\) is the batch size of the images.
 
 \section{Learning process}
-\label{sec:org0f1bff1}
+\label{sec:orge811523}
 \subsection{Visualizing}
-\label{sec:org682292b}
+\label{sec:orgb65fb92}
 The most foolproof method to debug code is to begin by plotting it out. In the following code snippet, we plot \emph{raw unknown values}.
 \begin{minted}[]{python}
     %matplotlib inline
@@ -135,7 +135,7 @@ The most foolproof method to debug code is to begin by plotting it out. In the f
 The argument \texttt{*params} is equivalent to passing the elements of \texttt{params} as individual arguemnts to our training model.
 
 \subsection{Backpropagation}
-\label{sec:org155dc9b}
+\label{sec:orgb2be1ce}
 A training loop can be written with the help of gradient descent optimizers and standard loss functions that are shipped along with the \texttt{PyTorch} packages. The following code block illustrates a training loop function:
 \begin{minted}[]{python}
     def training_loop(n_epochs, optimizer, params, t_u, t_c):
@@ -163,7 +163,7 @@ Note that the gradients are \emph{zeroed out} after each loss update to ensure t
 \end{minted}
 
 \subsection{Splitting datasets}
-\label{sec:org4a2fc8d}
+\label{sec:org4feedc2}
 Shuffling a dataset requires us to use a random permutation of tensor indices. This is done with the help of the \texttt{randperm} function.
 \begin{minted}[]{python}
     n_samples = t_u.shape[0]
@@ -174,9 +174,9 @@ Shuffling a dataset requires us to use a random permutation of tensor indices. T
 \end{minted}
 
 \section{Neural networks}
-\label{sec:orga4f9e80}
+\label{sec:org718d6eb}
 \subsection{Linear models}
-\label{sec:org8d777b1}
+\label{sec:org7591158}
 The \texttt{nn.Linear} constructor takes in \textbf{three} arguments:
 \begin{enumerate}
 \item Number of input features
@@ -195,7 +195,7 @@ The linear module so constructed can now be called like a regular function, by p
 \end{minted}
 
 \subsection{Sequential models}
-\label{sec:org6543621}
+\label{sec:orgcf75769}
 Multiple \texttt{nn} modules can be concatenated with the help of the \texttt{nn.Sequential} container. If suppose we were to construct a simple neural network containg 2 \emph{hidden} layers with a \texttt{Tanh} activation, the following code snippet would construct the required model:
 \begin{minted}[]{python}
     seq_model = nn.Sequential(
@@ -206,11 +206,11 @@ Multiple \texttt{nn} modules can be concatenated with the help of the \texttt{nn
 In essence, the model constructed above has 1 input feature which fans out to 13 hidden features which is then passed through a \texttt{Tanh} activation. This combines linearly to give a single output feature.
 
 \section{Basic vision}
-\label{sec:org2d3f218}
+\label{sec:org5dcb252}
 \subsection{Datasets}
-\label{sec:org25f085a}
+\label{sec:org9c37bc9}
 \subsubsection{Download}
-\label{sec:org5ed747b}
+\label{sec:org9ac6975}
 We make use of the \texttt{datasets} module to download standard datasets. For example, we would download the \textbf{CIFAR-10} dataset in the following manner:
 \begin{minted}[]{python}
     from torchvision import datasets
@@ -222,7 +222,7 @@ We make use of the \texttt{datasets} module to download standard datasets. For e
 \end{minted}
 
 \subsubsection{Dataset class}
-\label{sec:orgd1e1e9c}
+\label{sec:orgd928971}
 The length of the dataset object created above can be determined using \texttt{len}, which is a built-in Python function.
 \begin{minted}[]{python}
     len(cifar10)
@@ -233,7 +233,7 @@ Similarly, we can use standard subscripting as done for tuples and lists to acce
 \end{minted}
 
 \subsubsection{Transform}
-\label{sec:org1f819d6}
+\label{sec:org53b57e7}
 In most cases, we would need to convert images which are in the form of PIL images or NumPy arrays to tensors.
 \begin{minted}[]{python}
     from torchvision import transforms
@@ -247,7 +247,7 @@ In most cases, we would need to convert images which are in the form of PIL imag
 \end{minted}
 
 \subsubsection{Normalize}
-\label{sec:org3893545}
+\label{sec:org217902b}
 Suppose that we wanted to normalize the CIFAR10 dataset. To do so, we need to compute the mean as well as standard deviation per channel. We begin by stacking all image tensors along an extra dimension.
 \begin{minted}[]{python}
     imgs = torch.stack([img_t for img_t, _ in tensor_cifar10], dim=3)
@@ -260,22 +260,27 @@ And now, we are in a position to compute the desired values.
 The argument for normalization can then be added to \texttt{datasets.CIFAR10} with the help of the \texttt{transforms.Normalize} function by giving the mean and standard deviation as arguments to the latter.
 
 \subsection{Dataloaders}
-\label{sec:org04ba8fc}
+\label{sec:org0088117}
 The \texttt{DataLoader} class helps in shuffling the data and organizing it in minibatches. A sample training loop for it looks like the code snippet below.
 \begin{minted}[]{python}
     import torch
     import torch.nn as nn
+
     train_loader = torch.utils.data.DataLoader(cifar2, batch_size=64,
                                             shuffle=True)
+
     model = nn.Sequential(
                 nn.Linear(3072, 512),
                 nn.Tanh(),
                 nn.Linear(512, 2),
                 nn.LogSoftmax(dim=1))
+
     learning_rate = 1e-2
+
     optimizer = optim.SGD(model.parameters(), lr=learning_rate)
     loss_fn = nn.NLLLoss()
     n_epochs = 100
+
     for epoch in range(n_epochs):
         for imgs, labels in train_loader:
             batch_size = imgs.shape[0]
