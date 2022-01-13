@@ -159,3 +159,77 @@ Multiple =nn= modules can be concatenated with the help of the =nn.Sequential= c
                 nn.Linear(13, 1))
 #+end_src
 In essence, the model constructed above has 1 input feature which fans out to 13 hidden features which is then passed through a =Tanh= activation. This combines linearly to give a single output feature.
+
+* Basic vision
+** Datasets
+*** Download
+We make use of the =datasets= module to download standard datasets. For example, we would download the *CIFAR-10* dataset in the following manner:
+#+begin_src python
+    from torchvision import datasets
+    data_path = '/path/to/download' # download to this directory path
+    cifar10 = datasets.CIFAR10(data_path, train=True,
+                               download=True) # training data
+    cifar10_val = datasets.CIFAR10(data_path, train=False,
+                                   download=True) # validation data
+#+end_src
+
+*** Dataset class
+The length of the dataset object created above can be determined using =len=, which is a built-in Python function.
+#+begin_src python
+    len(cifar10)
+#+end_src
+Similarly, we can use standard subscripting as done for tuples and lists to access individual elements of the dataset.
+#+begin_src python
+    img, label = cifar10[99] # 99th image of the dataset
+#+end_src
+
+*** Transform
+In most cases, we would need to convert images which are in the form of PIL images or NumPy arrays to tensors.
+#+begin_src python
+    from torchvision import transforms
+    to_tensor = transforms.ToTensor()
+    img_t = to_tensor(img)
+#+end_src
+=img_t= is laid out in the format $C\times H\times W$. For the sake of brevity, this can also be passed directly as an argument to =dataset.CIFAR10=:
+#+begin_src python
+    tensor_cifar10 = datasets.CIFAR10(data_path, train=True, download=False,
+                                      transform=transforms.ToTensor())
+#+end_src
+
+*** Normalize
+Suppose that we wanted to normalize the CIFAR10 dataset. To do so, we need to compute the mean as well as standard deviation per channel. We begin by stacking all image tensors along an extra dimension.
+#+begin_src python
+    imgs = torch.stack([img_t for img_t, _ in tensor_cifar10], dim=3)
+#+end_src
+And now, we are in a position to compute the desired values.
+#+begin_src python
+    imgs.view(3, -1).mean(dim=1) # 3X1024 vector
+    imgs.view(3, -1).std(dim=1) # standard deviation
+#+end_src
+The argument for normalization can then be added to =datasets.CIFAR10= with the help of the =transforms.Normalize= function by giving the mean and standard deviation as arguments to the latter.
+
+** Dataloaders
+The =DataLoader= class helps in shuffling the data and organizing it in minibatches. A sample training loop for it looks like the code snippet below.
+#+begin_src python
+    import torch
+    import torch.nn as nn
+    train_loader = torch.utils.data.DataLoader(cifar2, batch_size=64,
+                                            shuffle=True)
+    model = nn.Sequential(
+                nn.Linear(3072, 512),
+                nn.Tanh(),
+                nn.Linear(512, 2),
+                nn.LogSoftmax(dim=1))
+    learning_rate = 1e-2
+    optimizer = optim.SGD(model.parameters(), lr=learning_rate)
+    loss_fn = nn.NLLLoss()
+    n_epochs = 100
+    for epoch in range(n_epochs):
+        for imgs, labels in train_loader:
+            batch_size = imgs.shape[0]
+            outputs = model(imgs.view(batch_size, -1))
+            loss = loss_fn(outputs, labels)
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+#+end_src
